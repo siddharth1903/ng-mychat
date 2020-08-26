@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "gchat-project-6a119": {
+      "hosting": {
+        "ng-mychat": [
+          "gchat-project-6a119"
+        ]
+      }
+    }
+  }
+}

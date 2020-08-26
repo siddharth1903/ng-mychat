@@ -23,6 +23,15 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
+            "allowedCommonJsDependencies": [
+              "@firebase/util",
+              "@firebase/component",
+              "@firebase/app",
+              "firebase/app",
+              "@firebase/firestore",
+              "@firebase/auth",
+              "@firebase/database"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -121,8 +130,16 @@
               "devServerTarget": "ng-mychat:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
-    }},
-  "defaultProject": "ng-mychat"
+    }
+  },
+  "defaultProject": "ng-mychat",
+  "cli": {
+    "analytics": "4dea0e15-5cae-4e9d-b819-eb2527146059"
+  }
 }

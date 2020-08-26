@@ -1,0 +1,36 @@
+<span class="room-header" *ngIf="user">Your Coversation with {{user.displayName}}</span>
+<div class="form-group">
+    <input type="text" class="form-control" [(ngModel)]="user.chatmessage" (keyup.enter)="sendMessage()"
+        aria-describedby="chatHelp" placeholder="Click to start typing.." />
+    <small id="emailHelp" class="form-text text-muted">Press enter key to send your message</small>
+</div>
+<div id="chat-room">
+    <div class="list-group" *ngFor="let message of messages | async">
+        <a *ngIf="isSenderOrReceiver(message)" [ngClass]="getMessageCls(message)"
+            class="list-group-item list-group-item-action flex-column align-items-start border-0">
+
+            <div class="d-flex w-100 justify-content-between" *ngIf="message.email==afService.email">
+                <div class="mb-1"><small class="custom-mute">{{message.timestamp | date:"dd-MMM-yy hh:mm a"}}</small>
+                </div>
+                <div class="mb-1" style="max-width:20em;">
+                    <p class="mb-1 chat-text">
+                        <img src="{{auth.userProfile.picture}}" class="img-thumbnail img-thumb-you border-0" />
+                        {{message.message}}
+                    </p>
+                </div>
+            </div>
+
+            <div class="d-flex w-100 justify-content-between" *ngIf="message.to==afService.email">
+                <div class="mb-1" style="max-width:20em;">
+                    <p class="mb-1 chat-text">
+                        {{user.displayName}} : {{message.message}}
+                    </p>
+                </div>
+                <div class="mb-1"><small class="custom-mute">{{message.timestamp | date:"dd-MMM-yy hh:mm a"}}</small>
+                </div>
+
+            </div>
+
+        </a>
+    </div>
+</div>
