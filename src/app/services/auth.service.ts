@@ -62,7 +62,13 @@ export class AuthService {
 
         this.userProfile = this.oauthService.getIdentityClaims();
 
+        this.chatService.email = (this.userProfile as any).email;
+
+        this.chatService.displayName = (this.userProfile as any).name;
+
         this.chatUsersService.authenticate();
+
+        this.chatService.addUserInfo();
 
       }
 
@@ -87,6 +93,8 @@ export class AuthService {
       client_id: this.oauthService.clientId,
       returnTo: this.oauthService.redirectUri
     }, true);
+
+    this.chatService.updateUserStatus('offline');
 
   }
 

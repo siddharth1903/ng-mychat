@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 
-import { AngularFireList, AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
+import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
 import { Observable } from 'rxjs';
-import { AngularFireAuth } from '@angular/fire/auth';
-import * as firebase from 'firebase/app';
-import { AuthService } from '../auth.service';
+import { first } from 'rxjs/operators';
+
+
 import { OAuthService } from 'angular-oauth2-oidc';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -14,27 +14,51 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class ChatService {
   public messages: Observable<any>;
   public users: Observable<any>;
-  public displayName: string;
-  public email: string;
+  private emailId: string;
+  private chatDisplayName: string;
+
   public chatEnable: string;
   subscriber: any;
-  constructor(public af: AngularFireDatabase, private auth: OAuthService, private afAuth: AngularFireAuth) {
+  constructor(public af: AngularFireDatabase, private auth: OAuthService, private store: AngularFirestore) {
+
+
     this.messages = this.af.list('messages').valueChanges();
     this.users = this.af.list('users').valueChanges();
   }
 
-  login(): void {
-    this.afAuth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+  get displayName(): string {
+
+    return this.chatDisplayName;
+
   }
 
-  updateUserStatus(status): Observable<any> {
+  set displayName(displayName) {
 
-    this.users.subscribe(snapshots => {
+    this.chatDisplayName = displayName;
+
+  }
+
+  get email(): string {
+    return this.emailId;
+  }
+
+  set email(emailId) {
+
+    this.emailId = emailId;
+
+  }
+
+  updateUserStatus(status): void {
+
+    this.af.list('users').snapshotChanges().pipe(first()).subscribe(snapshots => {
 
       snapshots.forEach(snapshot => {
 
-        if (snapshot.email === this.email) {
-          this.af.list('users').update(snapshot.$key, {
+        const snapshotEmail: string = snapshot.payload.child('email').val();
+
+        if (snapshotEmail === this.email) {
+
+          this.af.list('users').update(snapshot.key, {
             status
           });
         }
@@ -42,7 +66,6 @@ export class ChatService {
       }, this);
 
     });
-    return this.users;
   }
 
   checkIfUserExists(email): Observable<SnapshotAction<unknown>[]> {
@@ -56,6 +79,7 @@ export class ChatService {
    *
    */
   addUserInfo(): void {
+
     this.subscriber = this.checkIfUserExists(this.email).subscribe(results => {
       if (results.length === 0) {
         this.af.list('users').push({
@@ -87,6 +111,8 @@ export class ChatService {
   sendMessage(text, email): void {
 
     const message = {
+      email: this.email,
+      displayName: this.displayName,
       message: text,
       to: email,
       timestamp: Date.now()
