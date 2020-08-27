@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-user-profile',
@@ -7,5 +7,4 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class UserProfileComponent {
   @Input() user: any;
-  constructor() {}
 }
