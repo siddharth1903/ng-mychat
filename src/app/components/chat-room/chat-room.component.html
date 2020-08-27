@@ -6,8 +6,9 @@
 </div>
 <div id="chat-room">
     <div class="list-group" *ngFor="let message of messages | async">
-        <a *ngIf="isSenderOrReceiver(message)" [ngClass]="getMessageCls(message)"
-            class="list-group-item list-group-item-action flex-column align-items-start border-0">
+        <a *ngIf="isSenderOrReceiver(message)" [ngClass]="{
+            'chat-receiver': message.to === afService.email
+        }" class="list-group-item list-group-item-action flex-column align-items-start border-0">
 
             <div class="d-flex w-100 justify-content-between" *ngIf="message.email==afService.email">
                 <div class="mb-1"><small class="custom-mute">{{message.timestamp | date:"dd-MMM-yy hh:mm a"}}</small>

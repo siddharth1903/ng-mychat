@@ -1,58 +1,79 @@
+import { HttpBackend, HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpBackend } from '@angular/common/http';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { MANAGE_AUTH_CONFIG } from './auth.config';
+import { OAuthEvent, OAuthService } from 'angular-oauth2-oidc';
+
+import { MANAGE_AUTH } from '@constants/auth/manage-auth';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ChatUsersService {
+  public allUsers: any;
+  public authToken: string | undefined;
 
-  allUsers: any;
-  httpWithoutInterceptor: HttpClient;
-  authToken: string | undefined;
+  private httpWithoutInterceptor: HttpClient;
 
-  constructor(private httpClient: HttpClient, private backend: HttpBackend, private oauthService: OAuthService) {
+  constructor(
+    private httpClient: HttpClient,
+    private backend: HttpBackend,
+    private oauthService: OAuthService
+  ) {
+    this.httpWithoutInterceptor = new HttpClient(this.backend);
 
-    this.httpWithoutInterceptor = new HttpClient(backend);
+    this.oauthService.events.subscribe((event: OAuthEvent) => {
+      if (event.type === 'logout') {
+        this.authToken = undefined;
+        localStorage.removeItem('id_token');
+      }
+    });
   }
 
+  /**
+   *
+   * Authenticates the logged in user for auth0 management API's.
+   *
+   */
   authenticate(): void {
-
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
 
-    this.httpClient.post(MANAGE_AUTH_CONFIG.oauthUrl, {
-      client_id: MANAGE_AUTH_CONFIG.clientID,
-      audience: MANAGE_AUTH_CONFIG.audience,
-      grant_type: MANAGE_AUTH_CONFIG.grantType,
-      client_secret: MANAGE_AUTH_CONFIG.clientSecret
-    }, {
-      headers
-    }).subscribe((token: any) => {
-      localStorage.setItem('id_token', token.access_token);
-      this.authToken = token.access_token;
-    });
+    this.httpClient
+      .post(
+        MANAGE_AUTH.oauthUrl,
+        {
+          client_id: MANAGE_AUTH.clientID,
+          audience: MANAGE_AUTH.audience,
+          grant_type: MANAGE_AUTH.grantType,
+          client_secret: MANAGE_AUTH.clientSecret,
+        },
+        {
+          headers,
+        }
+      )
+      .subscribe((token: any) => {
+        localStorage.setItem('id_token', token.access_token);
+        this.authToken = token.access_token;
+      });
   }
 
-  getAllUsers(): void {
-
+  /**
+   *
+   * Fetches the list of all users available in the idp.
+   *
+   */
+  fetchAllUsers(): void {
     const headers: HttpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${this.authToken}`
+      Authorization: `Bearer ${this.authToken}`,
     });
 
-    this.httpWithoutInterceptor.get(this.oauthService.issuer + 'api/v2/users', {
-      headers
-    }).subscribe(
-      data => this.allUsers = data,
-      error => this.allUsers = error._body || error
-    );
-  }
-
-
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error);
+    this.httpWithoutInterceptor
+      .get(this.oauthService.issuer + 'api/v2/users', {
+        headers,
+      })
+      .subscribe(
+        (data) => (this.allUsers = data),
+        (error) => (this.allUsers = error._body || error)
+      );
   }
 }

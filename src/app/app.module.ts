@@ -1,26 +1,27 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AppComponent } from './app.component';
 
 import { HttpClientModule } from '@angular/common/http';
-import { OAuthModule } from 'angular-oauth2-oidc';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 
-import { environment } from '../environments/environment';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
-import { UserProfileComponent } from './user-profile/user-profile.component';
-import { ChatUsersComponent } from './chat-users/chat-users.component';
-import { ChatRoomComponent } from './chat-room/chat-room.component';
+
 import { FormsModule } from '@angular/forms';
 
+import { ChatRoomComponent } from '@components/chat-room/chat-room.component';
+import { ChatUsersComponent } from '@components/chat-users/chat-users.component';
+import { UserProfileComponent } from '@components/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [

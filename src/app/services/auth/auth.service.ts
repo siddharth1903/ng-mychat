@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AuthConfig, OAuthService, UserInfo } from 'angular-oauth2-oidc';
-import { Observable, Subject } from 'rxjs';
-import { ChatUsersService } from './chat-users/chat-users.service';
-import { ChatService } from './chat/chat.service';
+import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
 
+import { ChatUsersService } from '@services/chat-users/chat-users.service';
+import { ChatService } from '@services/chat/chat.service';
 
 export const authCodeFlowConfig: AuthConfig = {
   // Url of the Identity Provider
@@ -33,19 +32,15 @@ export const authCodeFlowConfig: AuthConfig = {
   showDebugInformation: true,
   customQueryParams: {
     // Your API's name
-    audience: 'https://gchat.au.auth0.com/api/v2/'
-  }
+    audience: 'https://gchat.au.auth0.com/api/v2/',
+  },
 };
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
-  // private userProfileSubject: Subject<UserInfo> = new Subject<UserInfo>();
-
-  private _userProfile: object;
+  private loggedInUser: object;
 
   constructor(
     private oauthService: OAuthService,
@@ -56,57 +51,64 @@ export class AuthService {
 
     this.oauthService.setStorage(localStorage);
 
-    this.oauthService.loadDiscoveryDocumentAndTryLogin().then((value: boolean) => {
+    this.oauthService
+      .loadDiscoveryDocumentAndTryLogin()
+      .then((value: boolean) => {
+        if (this.isAuthenticated()) {
+          this.userProfile = this.oauthService.getIdentityClaims();
 
-      if (this.isAuthenticated()) {
+          this.chatService.email = (this.userProfile as any).email;
 
-        this.userProfile = this.oauthService.getIdentityClaims();
+          this.chatService.displayName = (this.userProfile as any).name;
 
-        this.chatService.email = (this.userProfile as any).email;
+          this.chatUsersService.authenticate();
 
-        this.chatService.displayName = (this.userProfile as any).name;
-
-        this.chatUsersService.authenticate();
-
-        this.chatService.addUserInfo();
-
-      }
-
-    });
+          this.chatService.addUserInfo();
+        }
+      });
     this.oauthService.setupAutomaticSilentRefresh();
   }
 
   set userProfile(userProfile: object) {
-
-    this._userProfile = userProfile;
-
+    this.loggedInUser = userProfile;
   }
 
   get userProfile(): object {
-
-    return this._userProfile;
+    return this.loggedInUser;
   }
 
+  /**
+   *
+   * Logs the current user out.
+   *
+   */
   public logout(): void {
-
-    this.oauthService.revokeTokenAndLogout({
-      client_id: this.oauthService.clientId,
-      returnTo: this.oauthService.redirectUri
-    }, true);
+    this.oauthService.revokeTokenAndLogout(
+      {
+        client_id: this.oauthService.clientId,
+        returnTo: this.oauthService.redirectUri,
+      },
+      true
+    );
 
     this.chatService.updateUserStatus('offline');
-
   }
 
+  /**
+   *
+   * Logs a user in.
+   *
+   */
   public login(): void {
-
     this.oauthService.initCodeFlow();
-
   }
 
+  /**
+   *
+   * Returns if the cuurent user is authenticated.
+   *
+   */
   public isAuthenticated(): boolean {
-
     return this.oauthService.hasValidAccessToken();
-
   }
 }

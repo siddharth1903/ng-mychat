@@ -5,8 +5,9 @@
     <div class="col-12 col-sm-6 col-md-5 col-lg-4 order-0 order-sm-1">
         <span class="chat-users-header">List Of Users</span>
         <div class="list-group border-0" *ngFor="let user of users | async">
-            <a routerLink="." *ngIf="user.email != currentUser.email" [ngClass]="processClasses(user)"
-                class="border-0 list-group-item list-group-item-action text-left" (click)="onSelect(user)">
+            <a routerLink="." *ngIf="user.email != currentUser.email" [ngClass]="{
+                'bg-info text-white': selectedUser && user.email === selectedUser.email
+            }" class="border-0 list-group-item list-group-item-action text-left" (click)="setSelectedUser(user)">
                 <span>
                     <fa-icon [ngClass]="user.status" [icon]="circleIcon" aria-hidden="true"></fa-icon>
                     &nbsp;&nbsp;{{user.displayName}}
