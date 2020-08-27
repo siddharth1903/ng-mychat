@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+   - '12'
+dist: trusty
+sudo: required
+branches:
+only:
+  - features
+before_script:
+  - npm install -g @angular/cli
+  - npm install -g yarn
+script:
+  - yarn build:ci
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: dist/ng-mychat
+  on:
+    branch: features
