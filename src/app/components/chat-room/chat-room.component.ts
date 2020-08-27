@@ -25,7 +25,9 @@ export class ChatRoomComponent {
    *
    */
   public sendMessage(): void {
-    this.afService.sendMessage(this.user.chatmessage, this.user.email);
+
+    this.afService.sendMessage(this.user.chatmessage, this.user.id);
+
     this.user.chatmessage = '';
   }
 
@@ -38,9 +40,9 @@ export class ChatRoomComponent {
    */
   isSenderOrReceiver(message): boolean {
     return (
-      (message.to === this.afService.email &&
-        message.email === this.user.email) ||
-      (message.email === this.afService.email && message.to === this.user.email)
+      (message.toId === this.afService.userId &&
+        message.fromId === this.user.id) ||
+      (message.fromId === this.afService.userId && message.toId === this.user.id)
     );
   }
 }

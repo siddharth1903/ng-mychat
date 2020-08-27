@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
-import { Observable } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable, Subscriber } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 @Injectable({
@@ -10,89 +11,85 @@ export class ChatService {
   public messages: Observable<any>;
   public users: Observable<any>;
 
-  private emailId: string;
-  private chatDisplayName: string;
 
-  constructor(public af: AngularFireDatabase) {
+  private userIdentifier: string;
+
+  constructor(public af: AngularFireDatabase, private afStore: AngularFirestore) {
     this.messages = this.af.list('messages').valueChanges();
     this.users = this.af.list('users').valueChanges();
   }
 
-  get displayName(): string {
-    return this.chatDisplayName;
+  get userId(): string {
+    return this.userIdentifier;
   }
 
-  set displayName(displayName) {
-    this.chatDisplayName = displayName;
+  set userId(userId) {
+    this.userIdentifier = userId;
   }
 
-  get email(): string {
-    return this.emailId;
-  }
-
-  set email(emailId) {
-    this.emailId = emailId;
-  }
 
   /**
    *
    * Updates current User Status visibility
    *
-   * @param status Online/offline
+   * @param status online/offline
    *
    */
   updateUserStatus(status: 'online' | 'offline'): void {
-    this.af
-      .list('users')
-      .snapshotChanges()
-      .pipe(first())
-      .subscribe((snapshots) => {
-        snapshots.forEach((snapshot) => {
-          const snapshotEmail: string = snapshot.payload.child('email').val();
 
-          if (snapshotEmail === this.email) {
-            this.af.list('users').update(snapshot.key, {
-              status,
-            });
-          }
-        }, this);
+    const userQuery = this.af.database.ref('users').orderByChild('id').equalTo(this.userId);
+
+    userQuery.once('child_added', (snapshot) => {
+      snapshot.ref.update({
+        status
       });
+    });
+
   }
 
   /**
    *
    * Checks if user exists in the database
    *
-   * @param email The email id.
    *
    */
-  private checkIfUserExists(
-    email: string
-  ): Observable<SnapshotAction<unknown>[]> {
-    return this.af
-      .list('users', (ref) => ref.orderByChild('email').equalTo(email))
-      .snapshotChanges();
+  public checkIfUserExists(): Observable<boolean> {
+
+    return new Observable<boolean>((observer: Subscriber<boolean>) => {
+
+      this.af
+        .list('users', (ref) => ref.orderByChild('id').equalTo(this.userId))
+        .query.once('value', (snapshot) => {
+
+          observer.next(snapshot.exists());
+          observer.complete();
+        });
+
+    });
+
   }
 
   /**
    *
-   * Adds user information into the database.
+   * Adds users into the database.
+   *
+   * @param profileObject The user profile to be inserted.
    *
    */
-  addUserInfo(): void {
-    this.checkIfUserExists(this.email)
-      .pipe(first())
-      .subscribe((results) => {
-        if (results.length === 0) {
-          this.af.list('users').push({
-            email: this.email,
-            displayName: this.displayName,
-            status: 'online',
-          });
-        } else {
-          this.updateUserStatus('online');
-        }
-      });
+  addUserInfo(profileObject: {
+    email: string;
+    displayName: string;
+    picture?: string;
+  }): void {
+
+    this.af.list('users').push({
+      email: profileObject.email,
+      displayName: profileObject.displayName,
+      status: 'online',
+      id: this.userId,
+      picture: profileObject.picture || ''
+    });
+
   }
 
   /**
@@ -103,12 +100,11 @@ export class ChatService {
    * @param email the email address.
    *
    */
-  sendMessage(text, email): void {
+  sendMessage(text, userId): void {
     const message = {
-      email: this.email,
-      displayName: this.displayName,
+      fromId: this.userId,
       message: text,
-      to: email,
+      toId: userId,
       timestamp: Date.now(),
     };
     this.af.list('messages').push(message);

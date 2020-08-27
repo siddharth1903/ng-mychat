@@ -46,21 +46,21 @@ export class ChatUsersComponent implements OnInit {
 
         if (
           (this.selectedUser &&
-            this.selectedUser.email !== newMessage.email &&
-            newMessage.to === this.chatService.email) ||
-          (!this.selectedUser && newMessage.to === this.chatService.email)
+            this.selectedUser.id !== newMessage.fromId &&
+            newMessage.toId === this.chatService.userId) ||
+          (!this.selectedUser && newMessage.toId === this.chatService.userId)
 
         ) {
 
-          this.unreadMessages[newMessage.email] = this.unreadMessages[
-            newMessage.email] ? this.unreadMessages[newMessage.email] + 1 : 1;
+          this.unreadMessages[newMessage.fromId] = this.unreadMessages[
+            newMessage.fromId] ? this.unreadMessages[newMessage.fromId] + 1 : 1;
 
         } else if (
           this.selectedUser &&
-          this.selectedUser.email === newMessage.to
+          this.selectedUser.id === newMessage.fromId
         ) {
 
-          this.unreadMessages[newMessage.email] = 0;
+          this.unreadMessages[newMessage.fromId] = 0;
 
         }
       } else {
@@ -81,15 +81,20 @@ export class ChatUsersComponent implements OnInit {
   public setSelectedUser(user): void {
 
     this.selectedUser = user;
-    this.unreadMessages[user.email] = '';
+
+    this.unreadMessages[user.id] = '';
 
   }
 
   /**
    *
+   * Returns Unread messages for the selected user.
+   *
    * @param userEmail Returns unread messages for a user.
    */
   public getUnreadMessages(userEmail): any {
+
     return this.unreadMessages[userEmail];
+
   }
 }

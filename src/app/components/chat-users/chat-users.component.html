@@ -1,20 +1,20 @@
 <div class="row chat-users">
-    <div class="col-12 col-sm-6 col-md-7 col-lg-8 order-1 order-sm-0">
+    <div class="col-12 col-sm col-md-7 col-lg-8 order-1 order-md-0">
         <app-chat-room *ngIf="selectedUser" [user]="selectedUser"></app-chat-room>
     </div>
-    <div class="col-12 col-sm-6 col-md-5 col-lg-4 order-0 order-sm-1">
+    <div class="col-12 col-sm col-md-5 col-lg-4 order-0 order-md-1">
         <span class="chat-users-header">List Of Users</span>
         <div class="list-group border-0" *ngFor="let user of users | async">
             <a routerLink="." *ngIf="user.email != currentUser.email" [ngClass]="{
-                'bg-info text-white': selectedUser && user.email === selectedUser.email
+                'active': selectedUser && user.email === selectedUser.email
             }" class="border-0 list-group-item list-group-item-action text-left" (click)="setSelectedUser(user)">
                 <span>
                     <fa-icon [ngClass]="user.status" [icon]="circleIcon" aria-hidden="true"></fa-icon>
                     &nbsp;&nbsp;{{user.displayName}}
-                    <small class="text-muted">&nbsp;-&nbsp;({{user.status}})</small>
+                    <small>&nbsp;-&nbsp;({{user.status}})</small>
                 </span>
                 <span class="badge badge-pill badge-success"
-                    *ngIf="unreadMessages[user.email]">{{unreadMessages[user.email]}}</span>
+                    *ngIf="unreadMessages[user.id]">{{unreadMessages[user.id]}}</span>
             </a>
         </div>
     </div>

@@ -57,23 +57,37 @@ export class AuthService {
         if (this.isAuthenticated()) {
           this.userProfile = this.oauthService.getIdentityClaims();
 
-          this.chatService.email = (this.userProfile as any).email;
-
-          this.chatService.displayName = (this.userProfile as any).name;
+          this.chatService.userId = this.userProfile.sub;
 
           this.chatUsersService.authenticate();
 
-          this.chatService.addUserInfo();
+          this.chatService.checkIfUserExists().subscribe((isUserExists: boolean) => {
+
+            if (isUserExists) {
+
+              this.chatService.updateUserStatus('online');
+
+            } else {
+
+              this.chatService.addUserInfo({
+                email: this.userProfile.email,
+                displayName: this.userProfile.name,
+                ... this.userProfile.picture ? { picture: this.userProfile.picture } : {}
+              });
+
+            }
+          });
+
         }
       });
     this.oauthService.setupAutomaticSilentRefresh();
   }
 
-  set userProfile(userProfile: object) {
+  set userProfile(userProfile: any) {
     this.loggedInUser = userProfile;
   }
 
-  get userProfile(): object {
+  get userProfile(): any {
     return this.loggedInUser;
   }
 

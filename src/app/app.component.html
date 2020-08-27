@@ -36,10 +36,10 @@
     </div>
   </div>
   <div class="row" *ngIf="auth.isAuthenticated() && auth.userProfile && chatUsersService.authToken">
-    <div class="col col-md-4 col-lg-3">
+    <div class="col-12 col-md-4 col-lg-3">
       <app-user-profile [user]="auth.userProfile">Initializing user profile..Please wait</app-user-profile>
     </div>
-    <div class="col col-md-8 col-lg-9">
+    <div class="col-12 col-md-8 col-lg-9">
       <app-chat-users [currentUser]="auth.userProfile">Initializing Contact List..Please wait</app-chat-users>
     </div>
   </div>
