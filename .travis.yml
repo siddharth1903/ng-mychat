@@ -5,23 +5,22 @@ cache:
   yarn: true
   directories:
   - node_modules
-sudo: required
 branches: 
-only:
-- master
-- features
+  only:
+  - master
+  - features
 before_install:
-- curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.4
-- export PATH="$HOME/.yarn/bin:$PATH"
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.4
+  - export PATH="$HOME/.yarn/bin:$PATH"
 before_script:
-- npm install -g @angular/cli
+  - npm install -g @angular/cli
 install:
-- yarn
+    - yarn
 script:
-- yarn build:ci
-- yarn build:doc
+  - yarn build:ci
+  - yarn build:doc
 after_success:
-- bash ./scripts/deploy.sh
+  - bash ./scripts/deploy.sh
 env:
   global:
   - GH_USER: siddharth1903
