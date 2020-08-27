@@ -5,7 +5,6 @@
     "ng": "ng",
     "build:ci": "ng build --prod --base-href=/$npm_package_name/",
     "deploy": "ng deploy --base-href=/$npm_package_name/",
-    "predeploy": "compodoc -p tsconfig.base.json -d dist/documentation",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
