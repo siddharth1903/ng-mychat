@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireDatabase } from '@angular/fire/database';
 import { Observable, Subscriber } from 'rxjs';
-import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +12,8 @@ export class ChatService {
 
   private userIdentifier: string;
 
-  constructor(public af: AngularFireDatabase, private afStore: AngularFirestore) {
-    this.messages = this.af.list('messages').valueChanges();
+  constructor(public af: AngularFireDatabase) {
+    this.messages = this.af.list('messages', (ref) => ref.orderByChild('sortTime')).valueChanges();
     this.users = this.af.list('users').valueChanges();
   }
 
@@ -101,11 +99,15 @@ export class ChatService {
    *
    */
   sendMessage(text, userId): void {
+
+    const currentDate: number = Date.now();
+
     const message = {
       fromId: this.userId,
       message: text,
       toId: userId,
-      timestamp: Date.now(),
+      timestamp: currentDate,
+      sortTime: -currentDate
     };
     this.af.list('messages').push(message);
   }

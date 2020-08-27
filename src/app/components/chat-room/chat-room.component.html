@@ -27,7 +27,7 @@
                         <ng-container *ngIf="user.picture; else displayName">
                             <img [src]="user.picture" class="img-thumbnail img-thumb-you border-0" />
                         </ng-container>
-                        : {{message.message}}
+                        {{message.message}}
                     </p>
                 </div>
                 <div class="mb-1"><small class="custom-mute">{{message.timestamp | date:"dd-MMM-yy hh:mm a"}}</small>
