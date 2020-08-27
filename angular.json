@@ -28,8 +28,6 @@
               "@firebase/component",
               "@firebase/app",
               "firebase/app",
-              "@firebase/firestore",
-              "@firebase/auth",
               "@firebase/database"
             ],
             "assets": [

@@ -1,17 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCollapseModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { OAuthModule } from 'angular-oauth2-oidc';
-
-import { AngularFireAuthModule } from '@angular/fire/auth';
-
-import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { environment } from '../environments/environment';
@@ -33,10 +29,7 @@ import { UserProfileComponent } from '@components/user-profile/user-profile.comp
   imports: [
     BrowserModule,
     FormsModule,
-    NgbModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
-    AngularFireAuthModule,
     AngularFireDatabaseModule,
     HttpClientModule,
     OAuthModule.forRoot({
@@ -46,7 +39,7 @@ import { UserProfileComponent } from '@components/user-profile/user-profile.comp
       }
     }),
     FontAwesomeModule,
-    NgbModule,
+    NgbCollapseModule,
     AppRoutingModule
   ],
   providers: [],
