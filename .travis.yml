@@ -11,9 +11,8 @@ script:
   - yarn build:ci
   - yarn build:doc
 after_success:
-  - . ./scripts/deploy.sh
+  - bash ./scripts/deploy.sh
 env:
   global:
   - GH_USER: siddharth1903
   - GH_REPO: ng-mychat
-    secure: NgxDqhXU5hoqd/+TcKjHi9PITE9t7zloejwGmFDfFLR0H2GTOXJUTnRqkdIiNmMG8WQBoz8pycfwJrT1iGd0HisYZswLabshEmj95EUFM0AzMHXd+krGr/2Lq6mJ1Nm4uKC0HUeFG9C3cEsMfLsrDBy4WtKO5t1fg9iepcU11qr4wapJ38fb8T/LF82fnvpiusUe0Tq66HSQCBGcHlFDxY1JmBh30FmI+fLPdRrEFeHosOl6dxCKTs4ioFKNnivmHcz88SpS7ellajsDK2aMpSvk6TJHoJHcEd9H5QnkZ0b5ek4kvopgds1pb+Ji0BVTMSFMfsuRXBDyI3pwaON4qC41Okbg+5jGdWMypNE4JkNI9DIvZ/7NURTxPYDVMIBHaafbVTG41YI3fN09zMF8eIx9OTzrJdmegpz4AAUiHUsTHM02wxT8uqrtN7fit3jmmXgQgACe1qdlIK6b1W6ehWedaE6t6MYagit/o3609yub6LX7ceKWyB8CV4MLKwGDMG3hM2WYpZ4MUHEAPtZGsMmh+WByklSdaMC7AHTnuafcHrx4GSh23lcd3MBVO4qWVQTzWE+Cg4tbRD4u/yoZkNEtzdqTLfqZuOpt0Lx7ZoeLyqMKokT0+o8GFNXhO2aHoXtKxTu3NOV3GkShn5w03YLOFF/i1U0laPCRBgSyE9A=
