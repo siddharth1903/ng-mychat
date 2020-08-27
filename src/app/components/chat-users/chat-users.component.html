@@ -10,7 +10,7 @@
             }" class="border-0 list-group-item list-group-item-action text-left" (click)="setSelectedUser(user)">
                 <span>
                     <fa-icon [ngClass]="user.status" [icon]="circleIcon" aria-hidden="true"></fa-icon>
-                    &nbsp;&nbsp;{{user.displayName}}
+                    &nbsp;&nbsp;{{user.displayName | titlecase}}
                     <small>&nbsp;-&nbsp;({{user.status}})</small>
                 </span>
                 <span class="badge badge-pill badge-success"
