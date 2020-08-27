@@ -240,17 +240,13 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { NgModule } from &#x27;@angular/core&#x27;;
 import { BrowserModule } from &#x27;@angular/platform-browser&#x27;;
 
-import { NgbModule } from &#x27;@ng-bootstrap/ng-bootstrap&#x27;;
+import { NgbCollapseModule, NgbModule } from &#x27;@ng-bootstrap/ng-bootstrap&#x27;;
 import { AppComponent } from &#x27;./app.component&#x27;;
 
 import { HttpClientModule } from &#x27;@angular/common/http&#x27;;
 import { AngularFireModule } from &#x27;@angular/fire&#x27;;
 import { AngularFireDatabaseModule } from &#x27;@angular/fire/database&#x27;;
 import { OAuthModule } from &#x27;angular-oauth2-oidc&#x27;;
-
-import { AngularFireAuthModule } from &#x27;@angular/fire/auth&#x27;;
-
-import { AngularFirestoreModule } from &#x27;@angular/fire/firestore&#x27;;
 
 import { FontAwesomeModule } from &#x27;@fortawesome/angular-fontawesome&#x27;;
 import { environment } from &#x27;../environments/environment&#x27;;
@@ -272,10 +268,7 @@ import { UserProfileComponent } from &#x27;@components/user-profile/user-profile
   imports: [
     BrowserModule,
     FormsModule,
-    NgbModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
-    AngularFireAuthModule,
     AngularFireDatabaseModule,
     HttpClientModule,
     OAuthModule.forRoot({
@@ -285,7 +278,7 @@ import { UserProfileComponent } from &#x27;@components/user-profile/user-profile
       }
     }),
     FontAwesomeModule,
-    NgbModule,
+    NgbCollapseModule,
     AppRoutingModule
   ],
   providers: [],
