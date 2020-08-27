@@ -3,16 +3,17 @@ node_js:
 - '12'
 cache:
   yarn: true
-branches: 
+branches:
   only:
   - master
   - features
 script:
-  - yarn build:ci
-  - yarn build:doc
+- yarn build:ci
+- yarn build:doc
 after_success:
-  - bash ./scripts/deploy.sh
+- bash ./scripts/deploy.sh
 env:
   global:
   - GH_USER: siddharth1903
   - GH_REPO: ng-mychat
+  - secure: N4aMXiBRU5uSIDf1N3S5L11G8pVbgihcANMDJIAigttNZ3BfU25LfA6pFlHsGl2ZyJS5XJHp07mUS/uk3k5Wrke2jFJrZW16+Sc7ENcEQ46zkH8/GKaEXEpBCR9cbehLHcMdmDqUwmqQeEi2M4Sjx/zlpNSw1alxOX36XY/hDFwAB/glEoLW2ceF9OI3Awgx7YbkNM9NjvduPM9IYkNFQYbg/WlqvbhMxLd8Lt2PVWB0/y8OKWFhYSCDZx3Xp91pzoMPThzCvcbJTZbUXZkobbBIlmVz3TV3+LkikwdEr09P1VgmCLsrDc2+JbRsEXFUER/L7CZo4+ek7eHdj7a+lpDEkQFLwDi0EvRbfTLZ9aXBweo7xvoSOru2z+s9xInUaZxpzthejWrXvxdrt/UwxfHDoMPrqlZ+x2WJfYSYHQyp3prqdmdmrbshkFLkW9xsiLK7zcY7NrflDLQtL5Gq8EsKoBR98XNYLFXCZqpcTEaPDE+sC4JWAMB7A1Kterqgd+jen1jL0waXMWYY8/8t+hP1WNmMzW12HfZ7wY7HosAREVqYsZvVOLA+NzJ9dLlOusgb5pHrVAcZ0aBb9i1W7XaJbH0pIOLme6H2tLuyIwQeU+Wg+VSgK8QNugwsZvrPkDRugrBcFTQxT38lUClj2RMvgU/W7lCcPJqoB7tY2c0=
