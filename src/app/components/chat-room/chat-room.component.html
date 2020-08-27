@@ -1,4 +1,4 @@
-<span class="room-header" *ngIf="user">Your Coversation with {{user.displayName}}</span>
+<span class="room-header" *ngIf="user">Your Coversation with {{user.displayName | titlecase}}</span>
 <div class="form-group">
     <input type="text" class="form-control" [(ngModel)]="user.chatmessage" (keyup.enter)="sendMessage()"
         aria-describedby="chatHelp" placeholder="Click to start typing.." />
