@@ -42,7 +42,7 @@ export class ChatUsersComponent implements OnInit {
 
       if (this.canDisplayBadge) {
 
-        const newMessage = messages[messages.length - 1]; // The newly received message
+        const newMessage = messages[0]; // The newly received message
 
         if (
           (this.selectedUser &&
