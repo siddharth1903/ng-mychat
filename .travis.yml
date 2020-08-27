@@ -11,7 +11,7 @@ script:
   - yarn build:ci
   - yarn build:doc
 after_success:
-  - bash ./scripts/deploy.sh
+  - . ./scripts/deploy.sh
 env:
   global:
   - GH_USER: siddharth1903
