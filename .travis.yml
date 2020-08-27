@@ -1,6 +1,11 @@
 language: node_js
 node_js:
    - '12'
+
+cache:
+  directories:
+     - ./node_modules
+
 dist: trusty
 sudo: required
 branches:
@@ -10,6 +15,8 @@ only:
 before_script:
   - npm install -g @angular/cli
   - npm install -g yarn
+install:
+  - yarn
 script:
   - yarn build:ci
 deploy:
