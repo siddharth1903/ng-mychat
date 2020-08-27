@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import {
+  faBookReader,
   faExclamationTriangle,
   faSignInAlt,
 } from '@fortawesome/free-solid-svg-icons';
@@ -14,11 +15,11 @@ import { ChatUsersService } from './services/chat-users/chat-users.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'ng-mychat';
   public isMenuCollapsed = true;
 
   public signInIcon = faSignInAlt;
   public maskTriangleIcon = faExclamationTriangle;
+  public docsIcon = faBookReader;
 
   constructor(
     public auth: AuthService,
