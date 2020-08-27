@@ -38,7 +38,7 @@ export class ChatRoomComponent {
    * @param message The incoming message
    *
    */
-  isSenderOrReceiver(message): boolean {
+  public isSenderOrReceiver(message): boolean {
     return (
       (message.toId === this.afService.userId &&
         message.fromId === this.user.id) ||
